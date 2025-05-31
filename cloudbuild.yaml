@@ -47,8 +47,8 @@ substitutions:
   _REGION: 'southamerica-east1'
   _REPOSITORY: 'acai-containers'
   _SERVICE_NAME: 'acai-vm-controller'
-  _VM_NAME: 'acai-detector-vm'
-  _VM_ZONE: 'southamerica-east1-a'
+  _VM_NAME: 'vm-detectar-acai'
+  _VM_ZONE: 'us-west2-c'
 
 # Configurações do build (usando padrão gratuito)
 options:
