@@ -50,7 +50,7 @@ substitutions:
   _VM_NAME: 'acai-detector-vm'
   _VM_ZONE: 'southamerica-east1-a'
 
-# Configurações do build (usando padrão gratuito)
+# Configurações build (usando padrão gratuito)
 options:
   logging: CLOUD_LOGGING_ONLY
 
