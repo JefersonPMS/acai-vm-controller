@@ -42,18 +42,17 @@ steps:
     id: 'deploy-cloud-run'
     waitFor: ['push-image']
 
-# Variáveis substituíveis (podem ser configuradas no trigger)
+# Variáveis substituíveis (agora usando São Paulo - southamerica-east1)
 substitutions:
-  _REGION: 'us-central1'
+  _REGION: 'southamerica-east1'
   _REPOSITORY: 'acai-containers'
   _SERVICE_NAME: 'acai-vm-controller'
   _VM_NAME: 'acai-detector-vm'
-  _VM_ZONE: 'us-central1-a'
+  _VM_ZONE: 'southamerica-east1-a'
 
-# Configurações do build
+# Configurações do build (usando padrão gratuito)
 options:
   logging: CLOUD_LOGGING_ONLY
-  machineType: 'E2_HIGHCPU_8'
 
 # Timeout do build
-timeout: '1200s' 
+timeout: '1200s'
