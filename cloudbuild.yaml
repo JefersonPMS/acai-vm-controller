@@ -54,5 +54,5 @@ substitutions:
 options:
   logging: CLOUD_LOGGING_ONLY
 
-# Timeout do build
+# Timeout do build (1200 segundos)
 timeout: '1200s'
