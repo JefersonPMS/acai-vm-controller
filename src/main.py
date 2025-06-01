@@ -4,6 +4,7 @@ Permite ligar, desligar e monitorar VMs remotamente
 """
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from google.cloud import compute_v1
 import os
 import httpx
@@ -18,6 +19,21 @@ app = FastAPI(
     title="Açaí VM Controller",
     description="API para controlar VMs do GCP para processamento de açaí",
     version="1.0.0"
+)
+
+# Configurar CORS para permitir requisições do frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3001", 
+        "https://localhost:3000",
+        "https://localhost:3001",
+        # Adicionar outros domínios de produção conforme necessário
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
 )
 
 # Configurações do ambiente
