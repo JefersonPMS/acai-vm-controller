@@ -29,8 +29,10 @@ app.add_middleware(
         "http://localhost:3001", 
         "https://localhost:3000",
         "https://localhost:3001",
-        'https://aplicativo-tcc-front.vercel.app'
-        # Adicionar outros domínios de produção conforme necessário
+        "https://aplicativo-tcc-front.vercel.app",
+        "https://aplicativo-tcc-front-r7ua652of-jefersons-projects-a8a24014.vercel.app",
+        # Permitir outros deploys da Vercel
+        #"*"  # Temporariamente para debug - você pode restringir depois
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
