@@ -216,7 +216,8 @@ async def proxy_to_ml_vm(path: str, request: Request):
             )
         
         # Fazer proxy do request
-        url = f"http://{external_ip}:5000/{path}"
+        #url = f"http://{external_ip}:5000/{path}"    #quando for rodar localmente
+        url = f"http://{external_ip}:8000/{path}"    #quando for rodar na VM
         
         async with httpx.AsyncClient(timeout=300.0) as client:
             # Preparar headers
