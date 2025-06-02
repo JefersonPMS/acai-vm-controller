@@ -29,6 +29,7 @@ app.add_middleware(
         "http://localhost:3001", 
         "https://localhost:3000",
         "https://localhost:3001",
+        'https://aplicativo-tcc-front.vercel.app'
         # Adicionar outros domínios de produção conforme necessário
     ],
     allow_credentials=True,
