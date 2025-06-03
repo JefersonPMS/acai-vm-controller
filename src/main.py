@@ -26,19 +26,10 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        # "http://localhost:3000",
-        # "http://localhost:3001", 
-        # "https://localhost:3000",
-        # "https://localhost:3001",
-        # "http://192.168.3.13:3000",  # IP local do usuário
-        # "https://aplicativo-tcc-front.vercel.app",  # Domínio principal da Vercel
-        # "https://aplicativo-tcc-front-r7ua652of-jefersons-projects-a8a24014.vercel.app",
-        # # Permitir qualquer subdomínio da Vercel para este projeto
-        # "https://aplicativo-tcc-front-git-main-jefersons-projects-a8a24014.vercel.app",
-        # # Temporariamente permitir todas as origens para debug
-        "*"  # ATENÇÃO: Em produção, remover isto e manter apenas domínios específicos
+        "https://aplicativo-tcc-front.vercel.app",
+        "http://localhost:3000",
     ],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
