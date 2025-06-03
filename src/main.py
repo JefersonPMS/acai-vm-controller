@@ -182,13 +182,26 @@ async def get_operation_status(operation_id: str):
         logger.error(f"Erro ao verificar operação {operation_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Erro ao verificar operação: {str(e)}")
 
-@app.api_route("/ml/{path:path}", methods=["GET", "POST", "PUT", "DELETE"])
+@app.api_route("/ml/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
 async def proxy_to_ml_vm(path: str, request: Request):
     """
     Proxy requests para a VM de ML quando estiver rodando
     Permite usar a API da VM através deste controller
     """
     try:
+        # Tratar requisições OPTIONS (preflight CORS) diretamente
+        if request.method == "OPTIONS":
+            return Response(
+                status_code=200,
+                headers={
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                    "Access-Control-Allow-Headers": "*",
+                    "Access-Control-Allow-Credentials": "true",
+                    "Access-Control-Max-Age": "86400"
+                }
+            )
+        
         # Verificar se VM está rodando
         vm_status = await get_vm_status()
         if vm_status["status"] != "RUNNING":
@@ -229,11 +242,25 @@ async def proxy_to_ml_vm(path: str, request: Request):
                 params=request.query_params
             )
             
-            # Retornar response completa com headers
+            # Preparar headers de resposta preservando CORS da VM
+            response_headers = dict(response.headers)
+            
+            # Garantir headers de CORS essenciais
+            cors_headers = {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Credentials": "true"
+            }
+            
+            # Mesclar headers preservando os da VM quando existirem
+            final_headers = {**cors_headers, **response_headers}
+            
+            # Retornar response completa com headers corrigidos
             return Response(
                 content=response.content,
                 status_code=response.status_code,
-                headers=dict(response.headers),
+                headers=final_headers,
                 media_type=response.headers.get("content-type")
             )
             
