@@ -34,9 +34,10 @@ steps:
       '--platform', 'managed',
       '--region', '${_REGION}',
       '--allow-unauthenticated',
-      '--memory', '512Mi',
-      '--cpu', '1',
+      '--memory', '2Gi',
+      '--cpu', '2',
       '--max-instances', '10',
+      '--timeout', '3600',
       '--set-env-vars', 'GCP_PROJECT_ID=${PROJECT_ID},VM_NAME=${_VM_NAME},VM_ZONE=${_VM_ZONE}'
     ]
     id: 'deploy-cloud-run'
