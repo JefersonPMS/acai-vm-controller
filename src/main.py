@@ -5,6 +5,7 @@ Permite ligar, desligar e monitorar VMs remotamente
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from google.cloud import compute_v1
 import os
 import httpx
@@ -234,7 +235,13 @@ async def proxy_to_ml_vm(path: str, request: Request):
                 params=request.query_params
             )
             
-            return response.json()
+            # Retornar response completa com headers
+            return Response(
+                content=response.content,
+                status_code=response.status_code,
+                headers=dict(response.headers),
+                media_type=response.headers.get("content-type")
+            )
             
     except httpx.TimeoutException:
         raise HTTPException(status_code=504, detail="Timeout ao conectar com a VM")
