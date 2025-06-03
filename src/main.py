@@ -182,13 +182,65 @@ async def get_operation_status(operation_id: str):
         logger.error(f"Erro ao verificar operação {operation_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Erro ao verificar operação: {str(e)}")
 
+@app.get("/vm/connection-info")
+async def get_vm_connection_info():
+    """
+    Retorna informações de conexão da VM se ela estiver rodando
+    Frontend usa isso para conectar diretamente na VM
+    """
+    try:
+        vm_status = await get_vm_status()
+        
+        if vm_status["status"] != "RUNNING":
+            raise HTTPException(
+                status_code=503, 
+                detail=f"VM não está rodando (status: {vm_status['status']}). Ligue a VM primeiro."
+            )
+        
+        # Obter IP externo da VM
+        external_ip = None
+        for ni in vm_status["network_interfaces"]:
+            if ni["external_ip"]:
+                external_ip = ni["external_ip"]
+                break
+        
+        if not external_ip:
+            raise HTTPException(
+                status_code=503,
+                detail="VM não possui IP externo configurado"
+            )
+        
+        return {
+            "status": "running",
+            "vm_ip": external_ip,
+            "vm_port": 8000,
+            "upload_url": f"http://{external_ip}:8000/upload",
+            "health_url": f"http://{external_ip}:8000/health",
+            "docs_url": f"http://{external_ip}:8000/docs",
+            "message": "VM está rodando e pronta para receber uploads diretos"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Erro ao obter informações de conexão da VM: {e}")
+        raise HTTPException(status_code=500, detail=f"Erro ao obter informações da VM: {str(e)}")
+
+# Manter o proxy apenas para endpoints leves (não upload)
 @app.api_route("/ml/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
 async def proxy_to_ml_vm(path: str, request: Request):
     """
     Proxy requests para a VM de ML quando estiver rodando
-    Permite usar a API da VM através deste controller
+    NOTA: Evite usar para uploads grandes - use conexão direta
     """
     try:
+        # Bloquear uploads via proxy para evitar timeouts
+        if path == "upload" and request.method == "POST":
+            raise HTTPException(
+                status_code=400, 
+                detail="Upload deve ser feito diretamente na VM. Use /vm/connection-info para obter o IP da VM."
+            )
+        
         # Tratar requisições OPTIONS (preflight CORS) diretamente
         if request.method == "OPTIONS":
             return Response(
