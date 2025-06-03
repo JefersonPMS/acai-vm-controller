@@ -28,6 +28,7 @@ app.add_middleware(
     allow_origins=[
         "https://aplicativo-tcc-front.vercel.app",
         "http://localhost:3000",
+        "*"  # Permitir qualquer origem para desenvolvimento
     ],
     allow_credentials=False,
     allow_methods=["*"],
@@ -249,7 +250,6 @@ async def proxy_to_ml_vm(path: str, request: Request):
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
                     "Access-Control-Allow-Headers": "*",
-                    "Access-Control-Allow-Credentials": "true",
                     "Access-Control-Max-Age": "86400"
                 }
             )
@@ -301,8 +301,7 @@ async def proxy_to_ml_vm(path: str, request: Request):
             cors_headers = {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Credentials": "true"
+                "Access-Control-Allow-Headers": "*"
             }
             
             # Mesclar headers preservando os da VM quando existirem
