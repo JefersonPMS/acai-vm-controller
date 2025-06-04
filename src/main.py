@@ -214,11 +214,11 @@ async def get_vm_connection_info():
         return {
             "status": "running",
             "vm_ip": external_ip,
-            "vm_port": 8000,
-            "upload_url": f"http://{external_ip}:8000/upload",
-            "health_url": f"http://{external_ip}:8000/health",
-            "docs_url": f"http://{external_ip}:8000/docs",
-            "message": "VM está rodando e pronta para receber uploads diretos"
+            "vm_port": 443,  # HTTPS port
+            "upload_url": "https://vm-yolo.tecflorestal.dev/upload",
+            "health_url": "https://vm-yolo.tecflorestal.dev/health",
+            "docs_url": "https://vm-yolo.tecflorestal.dev/docs",
+            "message": "VM está rodando e pronta para receber uploads diretos via HTTPS"
         }
         
     except HTTPException:
