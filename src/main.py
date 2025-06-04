@@ -277,7 +277,7 @@ async def proxy_to_ml_vm(path: str, request: Request):
         
         # Fazer proxy do request
         #url = f"http://{external_ip}:5000/{path}"    #quando for rodar localmente
-        url = f"http://{external_ip}:8000/{path}"    #quando for rodar na VM
+        url = f"https://vm-yolo.tecflorestal.dev/{path}"    #usando HTTPS via domain
         
         async with httpx.AsyncClient(timeout=300.0) as client:
             # Preparar headers

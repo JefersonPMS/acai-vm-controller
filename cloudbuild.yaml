@@ -38,7 +38,10 @@ steps:
       '--cpu', '2',
       '--max-instances', '5',
       '--timeout', '3600',
-      '--set-env-vars', 'GCP_PROJECT_ID=${PROJECT_ID},VM_NAME=${_VM_NAME},VM_ZONE=${_VM_ZONE}'
+      '--set-env-vars', 'GCP_PROJECT_ID=${PROJECT_ID},VM_NAME=${_VM_NAME},VM_ZONE=${_VM_ZONE}',
+      '--execution-environment', 'gen2',
+      '--cpu-throttling',
+      '--no-cpu-boost'
     ]
     id: 'deploy-cloud-run'
     waitFor: ['push-image']
